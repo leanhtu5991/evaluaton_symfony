@@ -29,32 +29,28 @@ class AppFixtures extends Fixture
         $numTitles = count($titles);
         $numQuestions = 0;
         $entitiesQuestions =[];
-        if($numQuestions <19){
-            while ($numQuestions < 20) {
-                $question = new Questions;
-                $question->setTitle($titles[rand(0, $numTitles - 1 )]);
-                $question->setContent($faker->text);
-                $question->setUser($entitiesUsers[rand(0, $numUsers - 1 )]);
-                $numQuestions++;
-                $entitiesQuestions[] = $question;
-                $manager->persist($question);
-                $numQuestions++;
-            }
-        } else {
-            $count = 0;
-            while ($count < 30) {
+        while ($numQuestions < 20) {
+            $question = new Questions;
+            $question->setTitle($titles[rand(0, $numTitles - 1 )]);
+            $question->setContent($faker->text);
+            $question->setUser($entitiesUsers[rand(0, $numUsers - 1 )]);
+            $numQuestions++;
+            // $entitiesQuestions[] = $question;
+            $manager->persist($question);
+
+            // answer
+            $numAnswer = rand(0,3);
+            for($i = 0; $i<$numAnswer; $i++){
                 $answer = new Answers;
                 $answer->setContent($faker->text);
                 $answer->setStatus($faker->boolean);
-                $answer->setQuestion($entitiesQuestions[rand(0, $numQuestions-1)]);
+                $answer->setQuestion($question);
                 $manager->persist($answer);
-                $count++;
             }
-            
         }
         
-        // answer
-       
+        
+        
         $manager->flush();
     }
 }
